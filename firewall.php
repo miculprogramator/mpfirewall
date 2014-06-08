@@ -24,6 +24,7 @@ class Firewall {
 		'SQLI' => FALSE
 	);
 
+	private $_mysqliIsLoaded = true;
 	private $_logs = 'logs.txt';
 
     /**
@@ -33,6 +34,10 @@ class Firewall {
     * @return void 
     */
 	public function  __construct($protection = array() ,$detection = array()) {
+		
+		if (function_exists('mysqli_connect')) {
+			$this->_mysqliIsLoaded = false;
+		}
 
 		if (count($protection)) {
 
@@ -214,7 +219,13 @@ class Firewall {
 
 	private function _callSQLI(&$item, $key) {
 
-		$item = mysql_real_escape_string($item);
+		if($this->_mysqliIsLoaded)
+ +			$item = mysqli_real_escape_string($item);
+ +		else
+ +			if(strnatcmp(phpversion(),'5.5.0') >= 0)
+ +				die("Deoarece folosesti o versiune de php >= cu php 5.5.0 trebuie sa folosesti extensia mysqli care trebuie activata!");
+ +			else
+ +				$item = mysql_real_escape_string($item);
 	}
 
 	private function _detectSQLI($item, $key) {
