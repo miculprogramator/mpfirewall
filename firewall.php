@@ -35,9 +35,6 @@ class Firewall {
     */
 	public function  __construct($protection = array() ,$detection = array()) {
 		
-		if (function_exists('mysqli_connect')) {
-			$this->_mysqliIsLoaded = false;
-		}
 
 		if (count($protection)) {
 
@@ -90,6 +87,10 @@ class Firewall {
 	*  @return void
 	*/
 	public function enableProtection() {
+
+	    if (function_exists('mysqli_connect')) {
+			$this->_mysqliIsLoaded = false;
+		}
 
 		foreach ($this->_protection as $key => $val) {
 
@@ -220,12 +221,12 @@ class Firewall {
 	private function _callSQLI(&$item, $key) {
 
 		if($this->_mysqliIsLoaded)
- +			$item = mysqli_real_escape_string($item);
- +		else
- +			if(strnatcmp(phpversion(),'5.5.0') >= 0)
- +				die("Deoarece folosesti o versiune de php >= cu php 5.5.0 trebuie sa folosesti extensia mysqli care trebuie activata!");
- +			else
- +				$item = mysql_real_escape_string($item);
+ 			$item = mysqli_real_escape_string($item);
+ 		else
+ 			if(strnatcmp(phpversion(),'5.5.0') >= 0)
+ 				die("Deoarece folosesti o versiune de php >= cu php 5.5.0 trebuie sa folosesti extensia mysqli care trebuie activata!");
+ 			else
+ 				$item = mysql_real_escape_string($item);
 	}
 
 	private function _detectSQLI($item, $key) {
