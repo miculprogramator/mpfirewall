@@ -1,4 +1,4 @@
 mpfirewall
 ==========
 
-php firewall
+Proiect sustinut de http://micul-programator.ro
