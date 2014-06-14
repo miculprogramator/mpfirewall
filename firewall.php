@@ -4,7 +4,7 @@
  * @Package: Micul-Programator.ro firewall
  * @Author: Marian
  * @$Date: 06/08/2014
- * @Contact: contact@micul-programato.ro
+ * @Contact: contact@micul-programator.ro
  * @$Rev: 1 
  */
 
