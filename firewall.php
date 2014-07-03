@@ -78,7 +78,7 @@ class Firewall {
 		$mesaj .= "Request: ".$_SERVER['REQUEST_URI']."\n"; 
 		$mesaj .= "=======================================================================\n";
 
-		file_put_contents($this->_logs, $mesaj, FILE_APPEND);
+		file_put_contents($this->_logs, $mesaj, FILE_APPEND | LOCK_EX);
 	}
 
 	/**
