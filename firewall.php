@@ -22,7 +22,9 @@ class Firewall {
 		'XSS' => FALSE,
 		'RFI' => FALSE,
 		'SQLI' => FALSE
-	);
+    );
+
+    private $_excludes = array();
 
 	private $_mysqliIsLoaded = true;
 	private $_logs = 'logs.txt';
@@ -33,7 +35,7 @@ class Firewall {
     * @param array $detection -> lista de vulnerabilitati pentru care clasa ofera detectie
     * @return void 
     */
-	public function  __construct($protection = array() ,$detection = array()) {
+	public function  __construct($protection = array() ,$detection = array() ,$excludes = array()) {
 		
 
 		if (count($protection)) {
@@ -59,6 +61,14 @@ class Firewall {
 
 			}
 		}
+
+		if (count($excludes)) {
+			foreach ($excludes as $val) {
+					$this->_excludes[] = $val;
+			}
+        }
+
+        //print_r($this->_excludes);
 
 
 
@@ -94,7 +104,7 @@ class Firewall {
 
 		foreach ($this->_protection as $key => $val) {
 
-			if ($val === TRUE) {
+			if ($val === TRUE && !in_array($_SERVER['REQUEST_URI'], $this->_excludes) ) {
 
 				if (method_exists($this,$key)) {
 
@@ -115,7 +125,7 @@ class Firewall {
 
 		foreach ($this->_detection as $key => $val) {
 
-			if ($val === TRUE) {
+			if ($val === TRUE && !in_array($_SERVER['REQUEST_URI'], $this->_excludes) ) {
 
 				if (method_exists($this,$key)) {
 					call_user_func(get_class($this)."::".$key);
